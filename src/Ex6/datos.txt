@@ -1,0 +1,10 @@
+000001-DSF;50;10;500;null;Camion;
+000002-SDF;50;8;400;null;Camion;
+000003-RRR;50;5;250;null;Camion;
+000004-GFB;50;22;500;5;Coche;
+000005-TRY;50;31;500;5;Coche;
+000006-NVB;50;7;500;5;Coche;
+000007-RTE;50;1;500;20;Microbuses;
+000008-HGF;50;2;500;20;Microbuses;
+000009-KTD;50;31;500;5000;Vehíedculos de carga;
+000010-THG;50;20;500;5000;Vehíedculos de carga;
