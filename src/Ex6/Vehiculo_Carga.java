@@ -11,5 +11,11 @@ public class Vehiculo_Carga extends Vehiculo{
 		this.precio_alquiler=(dias_alquiler*precio_dia)+(20*Pma);
 		return precio_alquiler;
 	}
+	protected int getPma() {
+		return Pma;
+	}
+	protected void setPma(int pma) {
+		Pma = pma;
+	}
 
 }

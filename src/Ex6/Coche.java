@@ -11,4 +11,11 @@ protected int plazas;
 		this.precio_alquiler=(dias_alquiler*precio_dia)+(dias_alquiler*(plazas*1.5)); //1.5 por plaza i dia
 		return precio_alquiler;
 	}
+	protected int getPlazas() {
+		return plazas;
+	}
+	protected void setPlazas(int plazas) {
+		this.plazas = plazas;
+	}
+	
 }

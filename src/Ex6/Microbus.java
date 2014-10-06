@@ -11,4 +11,11 @@ public double get_precio_alquiler(){
 	this.precio_alquiler=(dias_alquiler*precio_dia)+(2*plazas);
 		return precio_alquiler;
 	}
+protected int getPlazas() {
+	return plazas;
+}
+protected void setPlazas(int plazas) {
+	this.plazas = plazas;
+}
+
 }
