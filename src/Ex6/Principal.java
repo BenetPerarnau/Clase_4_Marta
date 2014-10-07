@@ -6,12 +6,9 @@ import java.util.ArrayList;
 
 public class Principal {
 	private static BufferedReader stdin=new BufferedReader(new InputStreamReader(System.in));
-	public static ArrayList<Coche> coches=new ArrayList<Coche>();
-	public static ArrayList<Camion> camiones=new ArrayList<Camion>();
-	public static ArrayList<Microbus> microbuses=new ArrayList<Microbus>();
-	public static ArrayList<Vehiculo_Carga> cargas=new ArrayList<Vehiculo_Carga>();
+	public static ArrayList <Vehiculo> array;
 	public static void main(String[] args) {
-		Vehiculo[] array;
+		
 		byte op=0;
 		do{
 			System.out.println("1. Cargar datos de inicio");
@@ -27,13 +24,10 @@ public class Principal {
 			switch (op){
 			case 1:// Cargar datos
 				array=Base_Datos.leer_bbdd();
+				Base_Datos.imprimir_lista();
 				break;
 			case 2: //añadir vehiculo
 				byte op1=0;
-				coches.clear();
-				camiones.clear();
-				microbuses.clear();
-				cargas.clear();
 				do{
 					System.out.println("Añadir Vehiculo:");
 					System.out.println("1) Coche");
@@ -66,16 +60,21 @@ public class Principal {
 					}catch(Exception e){
 						System.out.println("valor fuera de rango");
 					}
-					Coche a=new Coche(matricula, dias_alquiler, plazas);
-					coches.add(a);
-					Base_Datos.Escribir_Bbdd( coches, camiones, microbuses, cargas);
+					
+					array.add(new Coche(matricula,dias_alquiler,plazas));
+					
+					Base_Datos.Escribir_Bbdd( array);
+					
 					break;
 				case 2://Camion
-					Camion b=new Camion(matricula,dias_alquiler);
-					camiones.add(b);
-					Base_Datos.Escribir_Bbdd( coches, camiones, microbuses, cargas);
+					
+					array.add(new Camion(matricula,dias_alquiler));
+					
+					Base_Datos.Escribir_Bbdd(array);
+					
 					break;
 				case 3://Microbus
+					
 					plazas=0;
 					try{
 						System.out.print("Introduce el numero de plazas => ");
@@ -83,9 +82,11 @@ public class Principal {
 					}catch(Exception e){
 						System.out.println("valor fuera de rango");
 					}
-					Microbus c=new Microbus(matricula, dias_alquiler, plazas);
-					microbuses.add(c);
-					Base_Datos.Escribir_Bbdd( coches, camiones, microbuses, cargas);
+					
+					array.add(new Microbus(matricula, dias_alquiler, plazas));
+					
+					Base_Datos.Escribir_Bbdd( array);
+					
 					break;
 				case 4://Vehiculo de carga
 					int pma=0;
@@ -95,18 +96,22 @@ public class Principal {
 					}catch(Exception e){
 						System.out.println("valor fuera de rango");
 					}
-					Vehiculo_Carga d=new Vehiculo_Carga(matricula, dias_alquiler, pma);
-					cargas.add(d);
-					Base_Datos.Escribir_Bbdd(coches, camiones, microbuses, cargas);
+					
+					array.add(new Vehiculo_Carga(matricula, dias_alquiler, pma));
+					
+					Base_Datos.Escribir_Bbdd(array);
+					
 					break;
 					default:
 						break;
 				}
 				break;
 			case 3://obtener alquiler
+				
 				matricula="";
 				array=Base_Datos.leer_bbdd();
 				Base_Datos.imprimir_lista();
+				
 				try{
 					System.out.print("Introduce la matricula => ");
 					matricula=stdin.readLine();
@@ -114,9 +119,9 @@ public class Principal {
 				}catch(Exception e){
 					System.out.println("Valor fuera de rango");
 				}
-				
-				for(int i=0; i<array.length; i++){
-					if(array[i].matricula.equalsIgnoreCase(matricula)){
+				boolean encontrado=false;
+				for(int i=0; i<array.size(); i++){
+					if(array.get(i).matricula.equalsIgnoreCase(matricula)){
 						boolean entra=false;
 						int dias=0;
 						do{
@@ -129,38 +134,40 @@ public class Principal {
 							entra=false;
 						}
 						}while(entra==false);
-						array[i].dias_alquiler=dias;
-						System.out.println("El alquiler sube a => "+array[i].get_precio_alquiler()+"€");
+						array.get(i).dias_alquiler=dias;
+						if(array.get(i) instanceof Coche){
+							Coche a=(Coche)array.get(i);
+						System.out.println("El alquiler sube a => "+a.getPrecio_alquiler()+"€");
+						}else if(array.get(i) instanceof Camion){
+							Camion a=(Camion)array.get(i);
+							System.out.println("Precio dia => "+a.precio_dia);
+							System.out.println("Dias => "+a.dias_alquiler);
+							System.out.println("El alquiler sube a => "+a.get_precio_alquiler()+"€");
+						}else if(array.get(i) instanceof Vehiculo_Carga){
+							Vehiculo_Carga a=(Vehiculo_Carga)array.get(i);
+							System.out.println("El alquiler sube a => "+a.get_precio_alquiler()+"€");
+						}else{
+							Microbus a=(Microbus) array.get(i);
+							System.out.println("El alquiler sube a => "+a.get_precio_alquiler()+"€");
+							encontrado=true;
+						}
 					}
 				}
+				if(encontrado==false){
+					System.out.println("La matricula introducida ("+matricula+") no corresponde a ningun vehiculo.");
+				}
+				
 				break;
 			case 4: //salir
 				
 				break;
 				default:
-					
+					System.out.println("La op => "+op+", no contempla ninguna acción.");
 					break;
 			}
 			
 		}while(op!=4);
-		/*
-		Coche a=new Coche("3241324-GND",10,5);
-		
-			System.out.println("Precio Coche => "+a.get_precio_alquiler());
-			System.out.println("Dias en alquiler => "+a.getDias_alquiler());
-		
-		Microbus b=new Microbus("414312-XCZ",10,19);
-		
-			System.out.println("Precio Microbus => "+b.get_precio_alquiler());
-		
-		Camion c=new Camion("324324-RQE",10);
-			
-			System.out.println("Precio camion => "+c.get_precio_alquiler());
-		
-		Vehiculo_Carga d=new Vehiculo_Carga("23141-SDS",2,5000);
-			
-			System.out.println("Precio Vehiculo de carga => "+d.get_precio_alquiler());
-			*/
+
 	}
 
 }
