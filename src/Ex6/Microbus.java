@@ -1,6 +1,6 @@
 package Ex6;
 
-public class Microbus extends Vehiculo {
+final class Microbus extends Vehiculo {
 	protected int plazas;
 	public Microbus(String matricula, int dias_alquiler, int plazas){
 		super(matricula,dias_alquiler);

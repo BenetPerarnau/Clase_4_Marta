@@ -1,6 +1,6 @@
 package Ex6;
 
-public class Camion extends Vehiculo {
+final class Camion extends Vehiculo {
 
 	public Camion(String matricula, int dias_alquiler){
 		

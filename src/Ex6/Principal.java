@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 public class Principal {
 	private static BufferedReader stdin=new BufferedReader(new InputStreamReader(System.in));
-	public static ArrayList<Coche[]> coches=new ArrayList<Coche[]>();
-	public static ArrayList<Camion[]> camiones=new ArrayList<Camion[]>();
-	public static ArrayList<Microbus[]> microbuses=new ArrayList<Microbus[]>();
-	public static ArrayList<Vehiculo_Carga[]> cargas=new ArrayList<Vehiculo_Carga[]>();
+	public static ArrayList<Coche> coches=new ArrayList<Coche>();
+	public static ArrayList<Camion> camiones=new ArrayList<Camion>();
+	public static ArrayList<Microbus> microbuses=new ArrayList<Microbus>();
+	public static ArrayList<Vehiculo_Carga> cargas=new ArrayList<Vehiculo_Carga>();
 	public static void main(String[] args) {
-		ArrayList<String[]> array=new ArrayList<String[]>();
+		Vehiculo[] array;
 		byte op=0;
 		do{
 			System.out.println("1. Cargar datos de inicio");
@@ -30,6 +30,10 @@ public class Principal {
 				break;
 			case 2: //añadir vehiculo
 				byte op1=0;
+				coches.clear();
+				camiones.clear();
+				microbuses.clear();
+				cargas.clear();
 				do{
 					System.out.println("Añadir Vehiculo:");
 					System.out.println("1) Coche");
@@ -47,7 +51,7 @@ public class Principal {
 				String matricula="";
 				int dias_alquiler=0;
 				try{
-				System.out.print("Introduce la matricula del coche => ");
+				System.out.print("Introduce la matricula del vehiculo => ");
 				matricula=stdin.readLine();
 				dias_alquiler=0;
 				}catch(Exception e){
@@ -57,40 +61,43 @@ public class Principal {
 				case 1://coche
 					int plazas=0;
 					try{
-						System.out.println("Introduce el numero de plazas => ");
+						System.out.print("Introduce el numero de plazas => ");
 						plazas=Integer.parseInt(stdin.readLine());
 					}catch(Exception e){
 						System.out.println("valor fuera de rango");
 					}
 					Coche a=new Coche(matricula, dias_alquiler, plazas);
-					coches.get(coches.size())[0]=a;
+					coches.add(a);
+					Base_Datos.Escribir_Bbdd( coches, camiones, microbuses, cargas);
 					break;
 				case 2://Camion
 					Camion b=new Camion(matricula,dias_alquiler);
-					camiones.get(camiones.size())[0]=b;
+					camiones.add(b);
+					Base_Datos.Escribir_Bbdd( coches, camiones, microbuses, cargas);
 					break;
 				case 3://Microbus
 					plazas=0;
 					try{
-						System.out.println("Introduce el numero de plazas => ");
+						System.out.print("Introduce el numero de plazas => ");
 						plazas=Integer.parseInt(stdin.readLine());
 					}catch(Exception e){
 						System.out.println("valor fuera de rango");
 					}
 					Microbus c=new Microbus(matricula, dias_alquiler, plazas);
-					microbuses.get(microbuses.size())[0]=c;
+					microbuses.add(c);
+					Base_Datos.Escribir_Bbdd( coches, camiones, microbuses, cargas);
 					break;
 				case 4://Vehiculo de carga
 					int pma=0;
 					try{
-						System.out.println("Introduce el PMA => ");
+						System.out.print("Introduce el PMA => ");
 						pma=Integer.parseInt(stdin.readLine());
 					}catch(Exception e){
 						System.out.println("valor fuera de rango");
 					}
 					Vehiculo_Carga d=new Vehiculo_Carga(matricula, dias_alquiler, pma);
-					cargas.get(cargas.size())[0]=d;
-					Base_Datos.Escribir_Bbdd(array, null, null, null, cargas);
+					cargas.add(d);
+					Base_Datos.Escribir_Bbdd(coches, camiones, microbuses, cargas);
 					break;
 					default:
 						break;
@@ -98,6 +105,7 @@ public class Principal {
 				break;
 			case 3://obtener alquiler
 				matricula="";
+				array=Base_Datos.leer_bbdd();
 				Base_Datos.imprimir_lista();
 				try{
 					System.out.print("Introduce la matricula => ");
@@ -107,6 +115,24 @@ public class Principal {
 					System.out.println("Valor fuera de rango");
 				}
 				
+				for(int i=0; i<array.length; i++){
+					if(array[i].matricula.equalsIgnoreCase(matricula)){
+						boolean entra=false;
+						int dias=0;
+						do{
+						try{
+							System.out.print("Dias que lo tendra alquilado => ");
+							dias=Integer.parseInt(stdin.readLine());
+							entra=true;
+						}catch(Exception e){
+							System.out.println("Valor fuera de rango");
+							entra=false;
+						}
+						}while(entra==false);
+						array[i].dias_alquiler=dias;
+						System.out.println("El alquiler sube a => "+array[i].get_precio_alquiler()+"€");
+					}
+				}
 				break;
 			case 4: //salir
 				

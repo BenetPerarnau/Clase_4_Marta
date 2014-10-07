@@ -1,6 +1,6 @@
 package Ex6;
 
-public class Vehiculo_Carga extends Vehiculo{
+final class Vehiculo_Carga extends Vehiculo{
 	
 	protected int Pma;
 	public Vehiculo_Carga(String matricula, int dias_alquiler, int pma){
